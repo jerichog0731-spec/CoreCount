@@ -32,8 +32,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve the dashboard from public/
-app.use(express.static(path.join(process.cwd(), 'public')));
+// Serve the Ionic React dashboard from frontend/dist/
+app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
+
 
 // ─── API Routes ──────────────────────────────────────────────────────────────
 
@@ -64,12 +65,13 @@ app.get('/api/v1/event-log', (_req, res) => {
   res.json({ logs });
 });
 
-// SPA fallback — serve dashboard for all non-API routes
+// SPA fallback — serve Ionic app for all non-API routes
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
+    res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'));
   }
 });
+
 
 // ─── Start server ────────────────────────────────────────────────────────────
 

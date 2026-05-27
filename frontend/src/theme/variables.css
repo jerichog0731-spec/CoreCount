@@ -1,0 +1,410 @@
+/* ═══════════════════════════════════════════════════════════
+   CoreCount — Ionic Theme Override
+   Overrides Ionic's CSS custom properties with the CoreCount
+   dark-mode palette. All Ionic components inherit these.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Primary: Indigo/Purple ────────────────────────────── */
+  --ion-color-primary: #6366f1;
+  --ion-color-primary-rgb: 99, 102, 241;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5759d3;
+  --ion-color-primary-tint: #7375f3;
+
+  /* ── Secondary: Purple ─────────────────────────────────── */
+  --ion-color-secondary: #a855f7;
+  --ion-color-secondary-rgb: 168, 85, 247;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #944ad9;
+  --ion-color-secondary-tint: #b166f8;
+
+  /* ── Success: Green ────────────────────────────────────── */
+  --ion-color-success: #4ade80;
+  --ion-color-success-rgb: 74, 222, 128;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #41c370;
+  --ion-color-success-tint: #5ce18d;
+
+  /* ── Warning: Amber ────────────────────────────────────── */
+  --ion-color-warning: #fbbf24;
+  --ion-color-warning-rgb: 251, 191, 36;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #dda820;
+  --ion-color-warning-tint: #fbc53a;
+
+  /* ── Danger: Red ───────────────────────────────────────── */
+  --ion-color-danger: #f87171;
+  --ion-color-danger-rgb: 248, 113, 113;
+  --ion-color-danger-contrast: #000000;
+  --ion-color-danger-contrast-rgb: 0, 0, 0;
+  --ion-color-danger-shade: #da6363;
+  --ion-color-danger-tint: #f97f7f;
+
+  /* ── Dark/Light ────────────────────────────────────────── */
+  --ion-color-dark: #f0f0fa;
+  --ion-color-dark-rgb: 240, 240, 250;
+  --ion-color-dark-contrast: #0a0a0f;
+  --ion-color-dark-contrast-rgb: 10, 10, 15;
+  --ion-color-dark-shade: #d4d4e0;
+  --ion-color-dark-tint: #f2f2fb;
+
+  --ion-color-medium: #5a5a7a;
+  --ion-color-medium-rgb: 90, 90, 122;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #4f4f6b;
+  --ion-color-medium-tint: #6b6b87;
+
+  --ion-color-light: #1a1a26;
+  --ion-color-light-rgb: 26, 26, 38;
+  --ion-color-light-contrast: #f0f0fa;
+  --ion-color-light-contrast-rgb: 240, 240, 250;
+  --ion-color-light-shade: #161621;
+  --ion-color-light-tint: #21212f;
+}
+
+/* ── Forced dark mode (app always runs dark) ─────────────── */
+body {
+  --ion-background-color: #0a0a0f;
+  --ion-background-color-rgb: 10, 10, 15;
+
+  --ion-text-color: #f0f0fa;
+  --ion-text-color-rgb: 240, 240, 250;
+
+  --ion-border-color: rgba(255, 255, 255, 0.07);
+  --ion-box-shadow-color: rgba(0, 0, 0, 0.4);
+
+  --ion-card-background: #1a1a26;
+
+  --ion-item-background: #111118;
+  --ion-item-border-color: rgba(255, 255, 255, 0.06);
+
+  --ion-toolbar-background: #111118;
+  --ion-toolbar-border-color: rgba(255, 255, 255, 0.06);
+  --ion-toolbar-color: #f0f0fa;
+
+  --ion-tab-bar-background: #111118;
+  --ion-tab-bar-border-color: rgba(255, 255, 255, 0.06);
+
+  --ion-input-background: #16161f;
+  --ion-select-background: #16161f;
+
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ── Sidebar / Split Pane ───────────────────────────────── */
+ion-split-pane {
+  --side-width: 258px;
+  --side-max-width: 258px;
+  --side-min-width: 258px;
+  --border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+ion-menu {
+  --background: #111118;
+  --max-width: 258px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.brand-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-icon-wrap ion-icon {
+  font-size: 22px;
+  color: #fff;
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: linear-gradient(135deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-sub {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #5a5a7a;
+}
+
+.nav-list {
+  padding: 12px 10px;
+}
+
+.nav-item {
+  --background: transparent;
+  --background-activated: rgba(99, 102, 241, 0.12);
+  --border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --inner-padding-end: 0;
+  --min-height: 42px;
+  margin-bottom: 2px;
+  color: #9898b8;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.nav-item.selected,
+.nav-item.item-router-link-active {
+  --background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  box-shadow: inset 2px 0 0 #6366f1;
+}
+
+.nav-item ion-icon {
+  font-size: 18px;
+  margin-right: 10px;
+  color: inherit;
+}
+
+/* ── Cards ──────────────────────────────────────────────── */
+ion-card {
+  --background: #1a1a26;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  margin: 0 0 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+ion-card-header {
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+ion-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0f0fa;
+}
+
+/* ── Items ──────────────────────────────────────────────── */
+ion-item {
+  --background: #111118;
+  --color: #9898b8;
+  --border-color: rgba(255, 255, 255, 0.05);
+}
+
+ion-label {
+  color: #f0f0fa !important;
+}
+
+ion-note {
+  color: #5a5a7a !important;
+}
+
+/* ── Inputs ─────────────────────────────────────────────── */
+ion-input,
+ion-textarea,
+ion-select {
+  --background: #16161f;
+  --color: #f0f0fa;
+  --placeholder-color: #5a5a7a;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+/* ── Toolbar ────────────────────────────────────────────── */
+ion-toolbar {
+  --background: #111118;
+  --color: #f0f0fa;
+  --border-color: rgba(255, 255, 255, 0.06);
+}
+
+ion-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ── Buttons ────────────────────────────────────────────── */
+ion-button[color="primary"] {
+  --box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+/* ── Badges ─────────────────────────────────────────────── */
+.badge-ok {
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-low {
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-pending {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-cat {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-hygiene  { background: rgba(99,102,241,0.15); color: #818cf8; }
+.badge-laundry  { background: rgba(96,165,250,0.15); color: #60a5fa; }
+.badge-cleaning { background: rgba(74,222,128,0.12); color: #4ade80; }
+.badge-special  { background: rgba(251,191,36,0.12); color: #fbbf24; }
+
+/* ── Stat cards ─────────────────────────────────────────── */
+.stat-card {
+  --background: #1a1a26;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stat-card ion-card-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+}
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 22px;
+}
+
+.stat-icon--purple { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+.stat-icon--red    { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+.stat-icon--blue   { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+.stat-icon--green  { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+
+.stat-label { font-size: 12px; color: #5a5a7a; font-weight: 500; display: block; margin-bottom: 2px; }
+.stat-value { font-size: 28px; font-weight: 700; color: #f0f0fa; display: block; }
+
+/* ── Content padding ────────────────────────────────────── */
+.content-wrap {
+  padding: 20px;
+  max-width: 1200px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0f0fa;
+  margin: 0 0 4px;
+}
+
+.page-sub {
+  font-size: 13px;
+  color: #5a5a7a;
+  margin: 0 0 20px;
+}
+
+/* ── Code block ─────────────────────────────────────────── */
+.code-block {
+  background: #0a0a0f;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #818cf8;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 360px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+/* ── Traffic lights (eligibility) ───────────────────────── */
+.eligibility-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.elig-item {
+  background: #16161f;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.traffic-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.traffic-dot--green { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+.traffic-dot--red   { background: #f87171; box-shadow: 0 0 6px rgba(248,113,113,0.5); }
+
+.elig-cat { font-size: 12.5px; font-weight: 500; color: #f0f0fa; }
+.elig-status { font-size: 11px; color: #5a5a7a; }
+
+/* ── Draft card ─────────────────────────────────────────── */
+.draft-body-text {
+  font-size: 13px;
+  color: #9898b8;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  padding: 10px 0 10px 12px;
+  border-left: 3px solid #6366f1;
+  margin: 10px 0;
+}
+
+/* ── MCL state colors ───────────────────────────────────── */
+.mcl-committed { color: #4ade80; font-weight: 600; font-size: 12px; }
+.mcl-hold      { color: #f87171; font-weight: 600; font-size: 12px; }
+.mcl-pending   { color: #fbbf24; font-size: 12px; }
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }

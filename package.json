@@ -5,7 +5,12 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:ui": "cd frontend && npm run dev",
     "build": "tsc",
+    "build:frontend": "cd frontend && npm run build",
+    "build:electron": "cd electron && npm install && npm run build",
+    "build:all": "npm run build && npm run build:frontend",
+    "build:exe": "npm run build:all && npm run build:electron",
     "start": "node dist/server.js"
   },
   "keywords": [
