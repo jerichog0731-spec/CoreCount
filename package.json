@@ -11,7 +11,7 @@
     "build:electron": "cd electron && npm install && npm run build",
     "build:all": "npm run build && npm run build:frontend",
     "build:exe": "npm run build:all && npm run build:electron",
-    "release": "npm run build:all && cd electron && npm run release",
+    "release": "powershell -ExecutionPolicy Bypass -File release.ps1",
     "start": "node dist/server.js"
   },
   "keywords": [

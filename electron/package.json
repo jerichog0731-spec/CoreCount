@@ -1,6 +1,6 @@
 {
   "name": "corecount-desktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CoreCount C.O.R.E. Engine — Desktop App Launcher",
   "main": "main.cjs",
   "private": true,
