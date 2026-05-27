@@ -4,7 +4,7 @@ import {
   IonContent, IonCard, IonCardContent, IonList, IonItem, IonLabel,
   IonInput, IonButton, IonToast, IonGrid, IonRow, IonCol,
 } from '@ionic/react';
-import { apiGet, apiPost, type Client, type Eligibility } from '../hooks/useApi';
+import { apiGet, apiPost, apiPatch, type Client, type Eligibility } from '../hooks/useApi';
 
 type ClientResp = { client: Client; eligibility: Record<string, Eligibility> };
 type NewClientResp = { client: Client };
@@ -17,6 +17,8 @@ const Clients: React.FC = () => {
   const [newClient, setNewClient]       = useState<Client | null>(null);
   const [lookupId, setLookupId]         = useState('');
   const [lookupResult, setLookupResult] = useState<ClientResp | null>(null);
+  const [notesText, setNotesText]       = useState('');
+  const [notesSaved, setNotesSaved]     = useState(false);
   const [toast, setToast]               = useState({ show: false, msg: '', color: 'success' });
 
   const showToast = (msg: string, color = 'success') => setToast({ show: true, msg, color });
@@ -39,7 +41,18 @@ const Clients: React.FC = () => {
     try {
       const data = await apiGet<ClientResp>(`/clients/${lookupId.trim()}`);
       setLookupResult(data);
+      setNotesText((data.client as any).internal_notes ?? '');
+      setNotesSaved(false);
     } catch (e) { showToast(String(e), 'danger'); setLookupResult(null); }
+  };
+
+  const saveNotes = async () => {
+    if (!lookupResult) return;
+    try {
+      await apiPatch(`/clients/${lookupResult.client.client_id}/notes`, { notes: notesText });
+      setNotesSaved(true);
+      showToast('Notes saved.');
+    } catch (e) { showToast(String(e), 'danger'); }
   };
 
   return (
@@ -122,8 +135,11 @@ const Clients: React.FC = () => {
                         <div style={{ fontFamily: 'monospace', fontSize: 18, fontWeight: 700, color: '#818cf8' }}>
                           {lookupResult.client.client_id}
                         </div>
-                        <div style={{ fontSize: 13, color: '#9898b8', margin: '6px 0 12px' }}>
+                        <div style={{ fontSize: 13, color: '#9898b8', margin: '6px 0 4px' }}>
                           👤 {lookupResult.client.first_name} · Family of {lookupResult.client.family_size}
+                        </div>
+                        <div style={{ fontSize: 12, color: '#5a5a7a', marginBottom: 12 }}>
+                          📦 Total distributions received: <strong style={{ color: '#a78bfa' }}>{(lookupResult.client as any).total_distributions_received ?? 0}</strong>
                         </div>
                         <div className="eligibility-grid">
                           {CATS.map(cat => {
@@ -140,6 +156,26 @@ const Clients: React.FC = () => {
                               </div>
                             );
                           })}
+                        </div>
+
+                        {/* Operator case notes */}
+                        <div style={{ marginTop: 14 }}>
+                          <p style={{ fontSize: 12, color: '#9898b8', marginBottom: 6, fontWeight: 600 }}>Operator Notes</p>
+                          <IonItem>
+                            <IonInput
+                              value={notesText}
+                              placeholder="Add case notes for this client..."
+                              onIonInput={e => { setNotesText(e.detail.value!); setNotesSaved(false); }}
+                            />
+                          </IonItem>
+                          <IonButton
+                            expand="block" size="small" fill="outline"
+                            color={notesSaved ? 'success' : 'primary'}
+                            style={{ marginTop: 8 }}
+                            onClick={saveNotes}
+                          >
+                            {notesSaved ? '✅ Notes Saved' : 'Save Notes'}
+                          </IonButton>
                         </div>
                       </div>
                     )}

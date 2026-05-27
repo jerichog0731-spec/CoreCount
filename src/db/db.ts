@@ -40,6 +40,32 @@ function initializeSchema(): void {
 
 initializeSchema();
 
+// ─── Safe column migrations (non-destructive ALTER TABLE) ────────────────
+// Adds new columns to existing databases without wiping data.
+function runMigrations(): void {
+  const migrations: Array<{ name: string; sql: string }> = [
+    {
+      name: 'add_internal_notes_to_clients',
+      sql: `ALTER TABLE clients ADD COLUMN internal_notes TEXT`,
+    },
+    {
+      name: 'add_total_distributions_to_clients',
+      sql: `ALTER TABLE clients ADD COLUMN total_distributions_received INTEGER DEFAULT 0`,
+    },
+  ];
+
+  for (const m of migrations) {
+    try {
+      db.prepare(m.sql).run();
+      console.log(`[DB] ✅ Migration applied: ${m.name}`);
+    } catch {
+      // Column already exists — safe to ignore
+    }
+  }
+}
+
+runMigrations();
+
 export default db;
 
 // ─── Convenience helper types ───────────────────────────────
@@ -52,6 +78,8 @@ export type ClientRow = {
   last_laundry_date: string | null;
   last_cleaning_date: string | null;
   last_special_date: string | null;
+  internal_notes: string | null;               // Operator case notes
+  total_distributions_received: number;         // Running distribution count
   created_at: string;
 };
 

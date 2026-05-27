@@ -1,7 +1,8 @@
 /**
  * CoreCount — Clients API Routes
- * GET  /api/v1/clients/:clientId  — load client + eligibility status
- * POST /api/v1/clients            — create new client
+ * POST  /api/v1/clients                    — create new client
+ * GET   /api/v1/clients/:clientId          — load client + eligibility
+ * PATCH /api/v1/clients/:clientId/notes    — update operator internal notes
  */
 
 import { Router, Request, Response } from 'express';
@@ -12,7 +13,7 @@ import { checkCooldown } from '../ai/decanting';
 
 const router = Router();
 
-// POST /api/v1/clients — onboard a new client
+// ─── POST /api/v1/clients — register a new client ────────────────────────────
 router.post('/', (req: Request, res: Response) => {
   const { firstName, familySize } = req.body as { firstName?: string; familySize?: number };
 
@@ -29,8 +30,8 @@ router.post('/', (req: Request, res: Response) => {
 
   try {
     db.prepare(`
-      INSERT INTO clients (client_id, first_name, family_size)
-      VALUES (?, ?, ?)
+      INSERT INTO clients (client_id, first_name, family_size, total_distributions_received)
+      VALUES (?, ?, ?, 0)
     `).run(clientId, firstName.trim(), size);
 
     const client = db.prepare('SELECT * FROM clients WHERE client_id = ?').get(clientId) as ClientRow;
@@ -41,7 +42,7 @@ router.post('/', (req: Request, res: Response) => {
   }
 });
 
-// GET /api/v1/clients/:clientId — load client and compute eligibility
+// ─── GET /api/v1/clients/:clientId — load client + eligibility ───────────────
 router.get('/:clientId', (req: Request, res: Response) => {
   const { clientId } = req.params;
 
@@ -52,13 +53,33 @@ router.get('/:clientId', (req: Request, res: Response) => {
   }
 
   const eligibility = {
-    Hygiene: checkCooldown('Hygiene', client.last_hygiene_date),
-    Laundry: checkCooldown('Laundry', client.last_laundry_date),
+    Hygiene:  checkCooldown('Hygiene',  client.last_hygiene_date),
+    Laundry:  checkCooldown('Laundry',  client.last_laundry_date),
     Cleaning: checkCooldown('Cleaning', client.last_cleaning_date),
-    Special: checkCooldown('Special', client.last_special_date),
+    Special:  checkCooldown('Special',  client.last_special_date),
   };
 
   return res.json({ client, eligibility });
+});
+
+// ─── PATCH /api/v1/clients/:clientId/notes — update operator case notes ──────
+router.patch('/:clientId/notes', (req: Request, res: Response) => {
+  const { clientId } = req.params;
+  const { notes } = req.body as { notes?: string };
+
+  if (typeof notes !== 'string') {
+    return res.status(400).json({ error: 'notes must be a string.' });
+  }
+
+  const client = db.prepare('SELECT client_id FROM clients WHERE client_id = ?').get(clientId);
+  if (!client) return res.status(404).json({ error: 'Client not found.' });
+
+  db.prepare(`
+    UPDATE clients SET internal_notes = ? WHERE client_id = ?
+  `).run(notes.trim(), clientId);
+
+  const updated = db.prepare('SELECT * FROM clients WHERE client_id = ?').get(clientId) as ClientRow;
+  return res.json({ client: updated, message: 'Notes updated.' });
 });
 
 export default router;

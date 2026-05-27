@@ -96,6 +96,11 @@ router.post('/', (req: Request, res: Response) => {
     VALUES (?, ?, ?, 1, ?, ?, ?)
   `).run(clientId, category, itemId ?? null, emergencyBypass ? 1 : 0, volunteerName ?? null, timestamp);
 
+  // 8. Increment client's total distribution count
+  db.prepare(`
+    UPDATE clients SET total_distributions_received = total_distributions_received + 1 WHERE client_id = ?
+  `).run(clientId);
+
   return res.status(201).json({
     success: true,
     transactionId: result.lastInsertRowid,

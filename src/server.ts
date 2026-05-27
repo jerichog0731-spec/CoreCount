@@ -15,6 +15,7 @@ import transactionsRouter from './routes/transactions';
 import suppliesRouter from './routes/supplies';
 import volunteersRouter from './routes/volunteers';
 import draftsRouter from './routes/drafts';
+import reconcileRouter from './routes/reconcile';
 
 // Jobs
 import { startLowStockJob } from './jobs/low-stock';
@@ -40,6 +41,7 @@ app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
 
 app.use('/api/v1/clients', clientsRouter);
 app.use('/api/v1/transactions', transactionsRouter);
+app.use('/api/v1/transactions', reconcileRouter);
 app.use('/api/v1/supplies', suppliesRouter);
 app.use('/api/v1/intake', suppliesRouter);
 app.use('/api/v1/volunteers', volunteersRouter);

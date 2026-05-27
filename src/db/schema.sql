@@ -17,8 +17,14 @@ CREATE TABLE IF NOT EXISTS clients (
     last_laundry_date TEXT,
     last_cleaning_date TEXT,
     last_special_date TEXT,
+    internal_notes TEXT,                          -- Operator case notes (free text)
+    total_distributions_received INTEGER DEFAULT 0, -- Running count of all service distributions
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Safe migration: add columns to existing databases if they don't exist yet
+CREATE TABLE IF NOT EXISTS _migrations (id INTEGER PRIMARY KEY, name TEXT UNIQUE, applied_at TEXT DEFAULT CURRENT_TIMESTAMP);
+INSERT OR IGNORE INTO _migrations (name) VALUES ('add_client_notes_and_distribution_count');
 
 -- ============================================================
 -- Table 2: inventory
