@@ -5,17 +5,28 @@
   "main": "main.cjs",
   "private": true,
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder build --win nsis"
+    "start":   "electron .",
+    "build":   "electron-builder build --win nsis",
+    "release": "electron-builder build --win nsis --publish always"
+  },
+  "dependencies": {
+    "electron-log":     "^5.2.4",
+    "electron-updater": "^6.3.9"
   },
   "devDependencies": {
-    "electron": "^31.0.0",
+    "electron":         "^31.0.0",
     "electron-builder": "^24.13.0"
   },
   "build": {
-    "appId": "org.projectdignityhobbs.corecount",
+    "appId":       "org.projectdignityhobbs.corecount",
     "productName": "CoreCount",
-    "copyright": "Project Dignity Hobbs",
+    "copyright":   "Project Dignity Hobbs",
+    "publish": {
+      "provider": "github",
+      "owner":    "jerichog0731-spec",
+      "repo":     "CoreCount",
+      "releaseType": "release"
+    },
     "directories": {
       "output": "C:\\Users\\Jeric\\Desktop\\CoreCount-Release"
     },
@@ -28,15 +39,16 @@
       "target": [
         { "target": "nsis", "arch": ["x64"] }
       ],
-      "artifactName": "CoreCount-Setup.exe",
-      "requestedExecutionLevel": "asInvoker"
+      "artifactName":              "CoreCount-Setup.exe",
+      "requestedExecutionLevel":   "asInvoker"
     },
     "nsis": {
-      "oneClick": true,
-      "perMachine": false,
+      "oneClick":              true,
+      "perMachine":            false,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "CoreCount"
+      "shortcutName":          "CoreCount",
+      "deleteAppDataOnUninstall": false
     }
   }
 }
