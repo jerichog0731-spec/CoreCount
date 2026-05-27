@@ -1,0 +1,26 @@
+# CoreCount — Git Ignore
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Local database — never commit live data
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Environment secrets
+.env
+
+# Logs
+logs/
+*.log
+
+# Metrics / audit silo files (generated at runtime)
+metrics/
+
+# OS noise
+.DS_Store
+Thumbs.db

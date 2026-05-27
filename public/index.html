@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C.O.R.E. Engine — Project Dignity Hobbs</title>
+  <meta name="description" content="CoreCount local backend dashboard for Project Dignity Hobbs. Manage inventory, clients, volunteers, and AI intake parsing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ── Sidebar ─────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="url(#g1)" stroke-width="2"/>
+          <path d="M12 20c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="20" cy="20" r="3" fill="url(#g1)"/>
+          <defs>
+            <linearGradient id="g1" x1="2" y1="2" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#6366f1"/>
+              <stop offset="1" stop-color="#a855f7"/>
+            </linearGradient>
+            <linearGradient id="g2" x1="12" y1="12" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#818cf8"/>
+              <stop offset="1" stop-color="#c084fc"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">C.O.R.E.</span>
+        <span class="brand-sub">Project Dignity Hobbs</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="dashboard" id="nav-dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" data-view="inventory" id="nav-inventory">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Inventory
+      </button>
+      <button class="nav-item" data-view="clients" id="nav-clients">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Clients
+      </button>
+      <button class="nav-item" data-view="intake" id="nav-intake">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        AI Intake
+      </button>
+      <button class="nav-item" data-view="volunteers" id="nav-volunteers">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        Volunteers
+      </button>
+      <button class="nav-item" data-view="drafts" id="nav-drafts">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Drafts
+      </button>
+      <button class="nav-item" data-view="eventlog" id="nav-eventlog">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Event Log
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <span class="status-dot" id="status-dot"></span>
+        <span class="status-text" id="status-text">Connecting...</span>
+      </div>
+      <div class="ai-badge" id="ai-badge">🤖 AI: Placeholder</div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ────────────────────────────────────────── -->
+  <main class="main" id="main">
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost btn-sm" id="refresh-btn" title="Refresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── View: Dashboard ──────────────────────────────────── -->
+    <section class="view active" id="view-dashboard">
+      <div class="view-header">
+        <h1 class="view-title">Dashboard</h1>
+        <p class="view-subtitle">Live inventory overview and system status</p>
+      </div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon--purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Total Items</span>
+            <span class="stat-value" id="stat-total-items">—</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon--red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Low Stock Alerts</span>
+            <span class="stat-value" id="stat-low-stock">—</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Clients Served</span>
+            <span class="stat-value" id="stat-clients">—</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon--green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="stat-content">
+            <span class="stat-label">Pending Drafts</span>
+            <span class="stat-value" id="stat-drafts">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Inventory by Category</h2>
+          </div>
+          <div class="card-body">
+            <div id="inventory-summary"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Low Stock Alerts</h2>
+          </div>
+          <div class="card-body">
+            <div id="low-stock-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── View: Inventory ──────────────────────────────────── -->
+    <section class="view" id="view-inventory">
+      <div class="view-header">
+        <h1 class="view-title">Inventory</h1>
+        <p class="view-subtitle">Supply stock levels and management</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Add Supply Item</h2>
+          <button class="btn btn-ghost btn-sm" id="toggle-add-supply">+ Add Item</button>
+        </div>
+        <div class="card-body" id="add-supply-form-wrap" style="display:none;">
+          <form id="add-supply-form" class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="supply-name">Item Name *</label>
+              <input class="form-input" id="supply-name" placeholder="e.g. Dove Shampoo" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supply-brand">Brand</label>
+              <input class="form-input" id="supply-brand" placeholder="e.g. Dove" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supply-cat">Category *</label>
+              <select class="form-input" id="supply-cat" required>
+                <option value="">Select...</option>
+                <option>Hygiene</option>
+                <option>Laundry</option>
+                <option>Cleaning</option>
+                <option>Special</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supply-yield-oz">Unit Size (oz)</label>
+              <input class="form-input" type="number" id="supply-yield-oz" placeholder="12" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supply-fmv">Fair Market Value / unit ($)</label>
+              <input class="form-input" type="number" step="0.01" id="supply-fmv" placeholder="0.96" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="supply-threshold">Low-Stock Threshold</label>
+              <input class="form-input" type="number" id="supply-threshold" placeholder="5" />
+            </div>
+            <div class="form-group form-group--full">
+              <button type="submit" class="btn btn-primary">Save Item</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h2 class="card-title">All Supplies</h2>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table" id="supplies-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Item</th><th>Brand</th><th>Category</th>
+                  <th>In Stock</th><th>Threshold</th><th>Status</th><th>Adjust</th>
+                </tr>
+              </thead>
+              <tbody id="supplies-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── View: Clients ────────────────────────────────────── -->
+    <section class="view" id="view-clients">
+      <div class="view-header">
+        <h1 class="view-title">Clients</h1>
+        <p class="view-subtitle">Register and look up anonymous client profiles</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h2 class="card-title">Register New Client</h2></div>
+          <div class="card-body">
+            <form id="client-form" class="form-stack">
+              <div class="form-group">
+                <label class="form-label" for="client-firstname">First Name *</label>
+                <input class="form-input" id="client-firstname" placeholder="First name only" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="client-familysize">Family Size *</label>
+                <input class="form-input" type="number" id="client-familysize" min="1" placeholder="1" required />
+              </div>
+              <button type="submit" class="btn btn-primary">Generate Digital Card</button>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h2 class="card-title">Look Up Client</h2></div>
+          <div class="card-body">
+            <form id="client-lookup-form" class="form-stack">
+              <div class="form-group">
+                <label class="form-label" for="client-id-input">Client ID</label>
+                <input class="form-input" id="client-id-input" placeholder="PDH-XXXXXXXX" />
+              </div>
+              <button type="submit" class="btn btn-secondary">Look Up</button>
+            </form>
+            <div id="client-result" class="mt-4"></div>
+          </div>
+        </div>
+      </div>
+      <div id="new-client-card" class="card mt-4" style="display:none;">
+        <div class="card-header"><h2 class="card-title">New Client Card</h2></div>
+        <div class="card-body" id="new-client-card-body"></div>
+      </div>
+    </section>
+
+    <!-- ── View: AI Intake ──────────────────────────────────── -->
+    <section class="view" id="view-intake">
+      <div class="view-header">
+        <h1 class="view-title">AI Intake Parser</h1>
+        <p class="view-subtitle">Submit raw donation descriptions — the AI parses and routes them through the MCL pipeline</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Submit Intake</h2>
+          <span class="badge badge--purple">AI Stub Active</span>
+        </div>
+        <div class="card-body">
+          <form id="intake-form" class="form-stack">
+            <div class="form-group">
+              <label class="form-label" for="intake-operator">Operator Name</label>
+              <input class="form-input" id="intake-operator" placeholder="Your name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="intake-raw-text">Raw Intake Description *</label>
+              <textarea class="form-input form-textarea" id="intake-raw-text" rows="4"
+                placeholder="e.g. Received 2 gallons of Suave shampoo donated by Grace Church. Also 48 oz Dawn dish soap." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-glow">Parse &amp; Submit to Event Bus</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="intake-result" class="card mt-4" style="display:none;">
+        <div class="card-header"><h2 class="card-title">Parse Result</h2></div>
+        <div class="card-body">
+          <div id="intake-result-body" class="code-block"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── View: Volunteers ─────────────────────────────────── -->
+    <section class="view" id="view-volunteers">
+      <div class="view-header">
+        <h1 class="view-title">Volunteers</h1>
+        <p class="view-subtitle">Onboarding submissions and emergency contacts</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Submit Volunteer Form</h2>
+          <button class="btn btn-ghost btn-sm" id="toggle-vol-form">+ New Submission</button>
+        </div>
+        <div class="card-body" id="vol-form-wrap" style="display:none;">
+          <form id="volunteer-form" class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="vol-name">Volunteer Name *</label>
+              <input class="form-input" id="vol-name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vol-ec">Emergency Contact Name *</label>
+              <input class="form-input" id="vol-ec" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vol-phone">Emergency Phone *</label>
+              <input class="form-input" id="vol-phone" type="tel" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vol-rel">Relationship *</label>
+              <input class="form-input" id="vol-rel" placeholder="e.g. Parent, Spouse" required />
+            </div>
+            <div class="form-group form-group--full">
+              <label class="form-label"><input type="checkbox" id="vol-minor" /> Volunteer is a minor (under 18)</label>
+            </div>
+            <div class="form-group form-group--full" id="parent-sig-wrap" style="display:none;">
+              <label class="form-label" for="vol-parent-sig">Parent/Guardian Signature *</label>
+              <input class="form-input" id="vol-parent-sig" placeholder="Type full name as digital signature" />
+            </div>
+            <div class="form-group form-group--full">
+              <label class="form-label" for="vol-sig">Volunteer Signature *</label>
+              <input class="form-input" id="vol-sig" placeholder="Type full name as digital signature" required />
+            </div>
+            <div class="form-group form-group--full">
+              <button type="submit" class="btn btn-primary">Submit Volunteer Form</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="card mt-4">
+        <div class="card-header"><h2 class="card-title">Submission History</h2></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Name</th><th>Emergency Contact</th><th>Phone</th><th>Minor</th><th>Date</th></tr></thead>
+              <tbody id="vol-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── View: Drafts ─────────────────────────────────────── -->
+    <section class="view" id="view-drafts">
+      <div class="view-header">
+        <h1 class="view-title">Draft Review Hub</h1>
+        <p class="view-subtitle">AI-generated outreach drafts awaiting your review</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Generate Draft</h2>
+        </div>
+        <div class="card-body">
+          <form id="draft-gen-form" class="form-row">
+            <div class="form-group" style="flex:1;">
+              <label class="form-label" for="draft-item-id">Item ID</label>
+              <input class="form-input" type="number" id="draft-item-id" placeholder="1" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="draft-type">Type</label>
+              <select class="form-input" id="draft-type">
+                <option value="social">Social Post</option>
+                <option value="email">Email</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="align-self:flex-end;">Generate</button>
+          </form>
+        </div>
+      </div>
+      <div class="card mt-4">
+        <div class="card-header"><h2 class="card-title">Pending Drafts</h2></div>
+        <div class="card-body" id="drafts-list"></div>
+      </div>
+    </section>
+
+    <!-- ── View: Event Log ──────────────────────────────────── -->
+    <section class="view" id="view-eventlog">
+      <div class="view-header">
+        <h1 class="view-title">Event Bus Log</h1>
+        <p class="view-subtitle">Real-time MCL validation and intake pipeline status</p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Transaction Log (last 50)</h2>
+          <button class="btn btn-ghost btn-sm" onclick="loadEventLog()">Refresh</button>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>TX ID</th><th>Item</th><th>Category</th><th>Bulk Oz</th><th>Packs</th><th>MCL State</th><th>Time</th></tr></thead>
+              <tbody id="event-log-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── Toast notification ──────────────────────────────────── -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
